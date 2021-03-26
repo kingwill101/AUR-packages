@@ -1,0 +1,6 @@
+[submodule "osxmidi/LinVst3-X"]
+	path = osxmidi/LinVst3-X
+	url = ssh://aur@aur.archlinux.org/linvst3-x-bin.git
+[submodule "osxmidi/LinVst3"]
+	path = osxmidi/LinVst3
+	url = ssh://aur@aur.archlinux.org/linvst3-bin.git
