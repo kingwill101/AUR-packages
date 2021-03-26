@@ -9,6 +9,11 @@ osxmidi/LinVst3-X
 osxmidi/LinVst3
 )
 
+
+git submodule update 
+git submodule foreach git checkout master 
+git submodule foreach git pull origin master
+
 for PROJECT in "${PROJECTS[@]}"; do
   echo $PROJECT
   pushd $PROJECT
@@ -18,6 +23,7 @@ for PROJECT in "${PROJECTS[@]}"; do
   echo "updating to -> " $VERSION
 
   sed -i "/pkgver=/c pkgver=$VERSION" PKGBUILD
+  sed -i "/pkgrel=1/c pkgrel=1" PKGBUILD
   
   echo "updating md5sum"
 
@@ -25,7 +31,16 @@ for PROJECT in "${PROJECTS[@]}"; do
 
   makepkg --printsrcinfo > .SRCINFO
 
-  echo "building PKGBUILD"
+  echo "verifying build"
+
+  makepkg -C -f --noconfirm
+
+  git add PKGBUILD .SRCINFO
+
+  git commit -m "roll package version to $VERSION"
+
+  git push
+
   popd
 done
 
