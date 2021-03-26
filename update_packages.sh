@@ -23,7 +23,10 @@ for PROJECT in "${PROJECTS[@]}"; do
   echo "updating to -> " $VERSION
 
   sed -i "/pkgver=/c pkgver=$VERSION" PKGBUILD
-  sed -i "/pkgrel=1/c pkgrel=1" PKGBUILD
+
+  #TODO figure how to script the release version
+  #set to 1 for now
+  sed -i "/pkgrel=/c pkgrel=1" PKGBUILD
   
   echo "updating md5sum"
 
