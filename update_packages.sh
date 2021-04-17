@@ -23,6 +23,7 @@ for PROJECT in "${PROJECTS[@]}"; do
   echo "updating to -> " $VERSION
 
   sed -i "/pkgver=/c pkgver=$VERSION" PKGBUILD
+  sed -i "/suffix=/c suffix=\"Manjaro\"" PKGBUILD
 
   #TODO figure how to script the release version
   #set to 1 for now
