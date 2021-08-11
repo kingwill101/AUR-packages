@@ -1,9 +1,3 @@
-get_latest_release() {
-  curl --silent "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub api
-    grep '"tag_name":' |                                            # Get tag line
-    sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
-} 
-
 PROJECTS=(
 osxmidi/LinVst3-X
 osxmidi/LinVst3
@@ -18,12 +12,25 @@ for PROJECT in "${PROJECTS[@]}"; do
   echo $PROJECT
   pushd $PROJECT
   
-  VERSION=$(get_latest_release $PROJECT)
+  JSON=$(curl -s https://api.github.com/repos/${PROJECT}/releases/latest)
+  
+  FILENAME=$( echo ${JSON} | jq '.assets[0].name')
 
+  if [ "${PROJECT}" == "osxmidi/LinVst3" ]; then
+      VERSION=$( echo ${FILENAME} | cut -d - -f 2)
+  else
+    VERSION=$( echo ${FILENAME} | cut -d - -f 3)
+  fi
+
+  DOWNLOAD_URL=$( echo ${JSON}  | jq '.assets[0].browser_download_url')
+
+  echo "filename -> " $FILENAME
+  echo "url -> " $DOWNLOAD_URL
   echo "updating to -> " $VERSION
 
   sed -i "/pkgver=/c pkgver=$VERSION" PKGBUILD
   sed -i "/suffix=/c suffix=\"Manjaro\"" PKGBUILD
+  sed -i "/source=/c source=($DOWNLOAD_URL)" PKGBUILD
 
   #TODO figure how to script the release version
   #set to 1 for now
@@ -41,12 +48,9 @@ for PROJECT in "${PROJECTS[@]}"; do
 
   git add PKGBUILD .SRCINFO
 
-  git commit -m "roll package version to $VERSION"
+  git commit -m "roll package version to $VERSION using package: ${FILENAME}"
 
   git push
 
   popd
 done
-
-
-
