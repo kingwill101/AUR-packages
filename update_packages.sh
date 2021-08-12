@@ -3,13 +3,19 @@ osxmidi/LinVst3-X
 osxmidi/LinVst3
 )
 
-
+echo "Updating submodules"
 git submodule update 
-git submodule foreach git checkout master 
-git submodule foreach git pull origin master
+echo "[submodules] fetching"
+git submodule foreach git fetch --all
+echo "[submodules] checking out"
+git submodule foreach git checkout master
+echo "[submodules] reset to latest"
+git submodule foreach git reset --hard origin/master
+# git submodule foreach git pull origin master
 
 for PROJECT in "${PROJECTS[@]}"; do
   echo $PROJECT
+  echo "[entering]  ${PROJECT}"
   pushd $PROJECT
   
   JSON=$(curl -s https://api.github.com/repos/${PROJECT}/releases/latest)
@@ -50,7 +56,8 @@ for PROJECT in "${PROJECTS[@]}"; do
 
   git commit -m "roll package version to $VERSION using package: ${FILENAME}"
 
-  git push
+  git push origin
 
+   echo "[leaving]  ${PROJECT}"
   popd
 done
