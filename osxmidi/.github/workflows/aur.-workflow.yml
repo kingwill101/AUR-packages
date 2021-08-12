@@ -1,0 +1,26 @@
+name: aur-deploy
+on:
+  schedule:
+    - cron: "0 10 * * *"
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup SSH Keys and known_hosts
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+
+      - name: Some task that fetches dependencies
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: ./fetch-deps.sh
+
+      - name: run deploy script
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: ./update_packages.sh
