@@ -14,7 +14,7 @@ jobs:
      
       - name: Run update script
         id: update-warp-version
-        working-directory: ./warp-terminal-aur
+        working-directory: warp-terminal
         run: |
           chmod +x update-warp-version.sh
           ./update-warp-version.sh
