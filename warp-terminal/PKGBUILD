@@ -1,0 +1,22 @@
+# Maintainer: Glenford Williams hey@glenfordwilliams.com
+pkgname=warp-terminal-bin
+pkgver=0.2024.10.08.08
+pkgrel=1
+pkgdesc="Warp terminal - The blazingly fast, Rust-based terminal"
+arch=('x86_64')
+url="https://app.warp.dev"
+license=('custom')
+depends=('glibc')
+source=("https://releases.warp.dev/stable/v0.2024.10.08.08.02.stable_02/warp-terminal_0.2024.10.08.08.02.stable.02_amd64.deb")
+sha256sums=('SKIP')
+
+prepare() {
+    # Rename the downloaded file to a consistent name
+    mv "${srcdir}"/*.deb "${srcdir}/warp-terminal.deb"
+}
+
+package() {
+    # Extract the renamed .deb file
+    bsdtar -xf "${srcdir}/warp-terminal.deb" -C "${pkgdir}"
+    rm -rf "${pkgdir}/usr/share/doc" "${pkgdir}/usr/share/man"
+}

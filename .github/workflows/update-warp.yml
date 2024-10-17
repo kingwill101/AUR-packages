@@ -1,0 +1,32 @@
+name: Update Warp Terminal AUR Package
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight
+  workflow_dispatch:
+
+jobs:
+
+  aur-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+     
+      - name: Run update script
+        id: update-warp-version
+        working-directory: ./warp-terminal-aur
+        run: |
+          chmod +x update-warp-version.sh
+          ./update-warp-version.sh
+
+      - name: Publish AUR package
+        id: aur-publish
+        uses: KSXGitHub/github-actions-deploy-aur@<TAG>
+        with:
+          pkgname: warp-terminal-bin
+          pkgbuild: ./warp-terminal/PKGBUILD
+          commit_username: ${{ secrets.AUR_USERNAME }}
+          commit_email: ${{ secrets.AUR_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_message: "Update Warp terminal to version ${{ steps.update-warp-version.outputs.pkgver }}"
+          ssh_keyscan_types: rsa,ecdsa,ed25519

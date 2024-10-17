@@ -1,0 +1,12 @@
+pkgbase = warp-terminal-bin
+	pkgdesc = Warp terminal - The blazingly fast, Rust-based terminal
+	pkgver = 0.2024.10.08.08.02
+	pkgrel = 1
+	url = https://app.warp.dev
+	arch = x86_64
+	license = custom
+	depends = glibc
+	source = https://releases.warp.dev/stable/v0.2024.10.08.08.02.stable_02/warp-terminal_0.2024.10.08.08.02.stable.02_amd64.deb
+	sha256sums = SKIP
+
+pkgname = warp-terminal-bin
