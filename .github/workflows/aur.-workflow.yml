@@ -12,6 +12,11 @@ jobs:
       - uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: set git cred
+        run: |
+          git config --global user.email "hey@glenfordwilliams.com"
+          git config --global user.name "Glen Will"
 
       - name: run deploy script
         env:
