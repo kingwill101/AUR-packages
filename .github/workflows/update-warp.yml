@@ -21,7 +21,8 @@ jobs:
 
       - name: Publish AUR package
         id: aur-publish
-        uses: KSXGitHub/github-actions-deploy-aur@<TAG>
+        uses: KSXGitHub/github-actions-deploy-aur@v3.0.1
+    
         with:
           pkgname: warp-terminal-bin
           pkgbuild: ./warp-terminal/PKGBUILD
